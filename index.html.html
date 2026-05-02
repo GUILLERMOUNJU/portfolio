@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INNOA | Mentes Inquietas, Clientes Audaces</title>
+<meta name="description" content="Hub tecnológico multidisciplinario. Desarrollo web, Inteligencia Artificial, Realidad Aumentada y Educación 4.0. San Salvador de Jujuy, Argentina.">
+<link rel="icon" href="/images/innoa-logo.png">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#050505;--fg:#f0f0f0;--card:#0a0a0a;--muted:#111;--muted-fg:#888;--secondary:#1a1a2e;--border:rgba(255,255,255,0.06);--violet:#b347ea;--violet-dim:#7c3aed;--metallic:#8a8a9a;--metallic-light:#b0b0c0;--metallic-dark:#3a3a4a}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--fg);line-height:1.6;overflow-x:hidden}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#050505}::-webkit-scrollbar-thumb{background:#8a8a9a44;border-radius:3px}::-webkit-scrollbar-thumb:hover{background:#8a8a9a88}
+::selection{background:rgba(179,71,234,0.3);color:#fff}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.grid-pattern{background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:60px 60px}
+
+/* ANIMATIONS */
+@keyframes metallicSweep{0%{background-position:100% 0}50%{background-position:0% 0}100%{background-position:100% 0}}
+@keyframes heroReflection{0%{background-position:200% 0}50%{background-position:-50% 0}100%{background-position:200% 0}}
+@keyframes shimmerSweep{0%{left:-100%;opacity:0}20%{opacity:1}80%{opacity:1}100%{left:200%;opacity:0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(50px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}
+@keyframes wave1{0%,100%{d:path("M0,100 C360,180 720,20 1080,100 C1260,140 1380,80 1440,100 L1440,200 L0,200 Z")}50%{d:path("M0,80 C360,140 720,60 1080,120 C1260,160 1380,60 1440,80 L1440,200 L0,200 Z")}}
+@keyframes wave2{0%,100%{d:path("M0,130 C300,60 600,170 900,90 C1100,50 1300,150 1440,130 L1440,200 L0,200 Z")}50%{d:path("M0,90 C300,160 600,50 900,140 C1100,170 1300,70 1440,90 L1440,200 L0,200 Z")}}
+@keyframes scanLine{0%{top:-2px}100%{top:100vh}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
+@keyframes borderGlow{0%,100%{border-color:rgba(255,255,255,0.08)}50%{border-color:rgba(179,71,234,0.15)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+/* SHIMMER TEXT */
+.text-metallic-shine{position:relative;display:inline-block;background:linear-gradient(90deg,#c0c0d0,#ffffff,#e0e0f0,#c0c0d0);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:metallicSweep 6s ease-in-out infinite}
+.text-reflection-metallic{position:relative;display:inline-block;color:#f0f0f0;-webkit-text-fill-color:#f0f0f0}
+.text-reflection-metallic::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;background:linear-gradient(90deg,transparent 0%,transparent 25%,rgba(255,255,255,0.6) 40%,rgba(200,190,230,0.4) 48%,rgba(255,255,255,0.6) 52%,rgba(190,210,200,0.35) 56%,transparent 72%,transparent 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;animation:heroReflection 4s ease-in-out infinite;-webkit-text-fill-color:transparent}
+.title-shimmer{position:relative;display:inline}
+.title-shimmer::after{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);pointer-events:none;animation:shimmerSweep 6s ease-in-out infinite}
+.gradient-text-neon{background:linear-gradient(135deg,#c0c0d0,#f0f0f0,#b8d0c0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:all 0.5s;padding:1rem 1.5rem}
+.nav.scrolled{background:rgba(5,5,5,0.85);backdrop-filter:blur(40px);border-bottom:1px solid rgba(255,255,255,0.05);box-shadow:0 4px 30px rgba(0,0,0,0.3)}
+.nav-inner{max-width:80rem;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:0.75rem;font-size:1.25rem;font-weight:700;letter-spacing:0.15em}
+.nav-logo-icon{width:2.5rem;height:2.5rem;border-radius:0.5rem;background:linear-gradient(to bottom right,var(--metallic-dark),var(--metallic));display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:1.125rem}
+.nav-links{display:none;align-items:center;gap:1.75rem}
+.nav-links a{font-size:0.8125rem;color:var(--muted-fg);text-transform:uppercase;letter-spacing:0.15em;font-weight:500;transition:color 0.3s}
+.nav-links a:hover{color:var(--violet)}
+.nav-cta{padding:0.625rem 1.5rem;border-radius:9999px;background:linear-gradient(to right,var(--violet),var(--violet-dim));color:#fff;font-size:0.875rem;font-weight:600;transition:all 0.3s;letter-spacing:0.05em}
+.nav-cta:hover{box-shadow:0 0 30px rgba(179,71,234,0.5)}
+.nav-hamburger{background:none;border:none;color:var(--fg);cursor:pointer;display:block;font-size:1.5rem}
+.nav-mobile{display:none;flex-direction:column;align-items:center;gap:1.25rem;padding:2rem;background:rgba(5,5,5,0.95);backdrop-filter:blur(40px);border-bottom:1px solid rgba(255,255,255,0.05)}
+.nav-mobile.open{display:flex}
+.nav-mobile a{color:var(--muted-fg);text-transform:uppercase;letter-spacing:0.15em;font-size:0.875rem;font-weight:500;transition:color 0.3s}
+.nav-mobile a:hover{color:var(--violet)}
+@media(min-width:1024px){.nav-links{display:flex}.nav-hamburger{display:none}}
+
+/* SECTIONS */
+.section{position:relative;padding:6rem 1.5rem}
+@media(min-width:768px){.section{padding:9rem 1.5rem}}
+.section-inner{max-width:80rem;margin:0 auto}
+.section-tag{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.3em;color:var(--metallic-light);margin-bottom:1rem;display:block}
+.section-title{font-size:2.25rem;font-weight:900;line-height:1.2;margin-bottom:1.5rem}
+@media(min-width:768px){.section-title{font-size:3.75rem}}
+
+/* BUTTONS */
+.btn-primary{display:inline-flex;align-items:center;gap:0.75rem;padding:1rem 2.25rem;border-radius:9999px;background:linear-gradient(to right,var(--violet),var(--violet-dim));color:#fff;font-weight:600;font-size:1.125rem;transition:all 0.5s;letter-spacing:0.05em;border:none;cursor:pointer}
+.btn-primary:hover{box-shadow:0 0 40px rgba(179,71,234,0.5)}
+.btn-outline{display:inline-flex;align-items:center;gap:0.75rem;padding:1rem 2.25rem;border-radius:9999px;border:2px solid rgba(179,71,234,0.3);color:var(--violet);font-weight:700;font-size:1.125rem;transition:all 0.5s;letter-spacing:0.05em;background:transparent;cursor:pointer}
+.btn-outline:hover{background:rgba(179,71,234,0.1);border-color:rgba(179,71,234,0.5);box-shadow:0 0 30px rgba(179,71,234,0.3)}
+.btn-badge{display:inline-flex;align-items:center;gap:0.75rem;padding:1rem 2rem;border-radius:9999px;background:linear-gradient(to right,var(--violet),var(--violet-dim));color:#fff;font-weight:700;font-size:1.125rem;letter-spacing:0.05em}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:1rem;overflow:hidden;transition:all 0.7s}
+.card:hover{border-color:rgba(255,255,255,0.1)}
+.card-glow:hover{box-shadow:0 0 40px rgba(255,255,255,0.03)}
+
+/* GLOW ORBS */
+.glow{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none}
+
+/* WAVE DIVIDERS */
+.wave{position:relative;width:100%;height:8rem;overflow:hidden}
+@media(min-width:768px){.wave{height:12rem}}
+.wave.flip{transform:rotate(180deg)}
+.wave svg{position:absolute;bottom:0;width:100%;height:100%}
+.wave-path{animation:waveAnim1 8s ease-in-out infinite}
+.wave-path2{animation:waveAnim2 10s ease-in-out infinite;animation-delay:1s}
+@keyframes waveAnim1{0%,100%{d:path("M0,100 C360,180 720,20 1080,100 C1260,140 1380,80 1440,100 L1440,200 L0,200 Z")}25%{d:path("M0,120 C360,40 720,160 1080,80 C1260,60 1380,140 1440,120 L1440,200 L0,200 Z")}50%{d:path("M0,80 C360,140 720,60 1080,120 C1260,160 1380,60 1440,80 L1440,200 L0,200 Z")}75%{d:path("M0,110 C360,50 720,150 1080,90 C1260,130 1380,70 1440,110 L1440,200 L0,200 Z")}100%{d:path("M0,100 C360,180 720,20 1080,100 C1260,140 1380,80 1440,100 L1440,200 L0,200 Z")}}
+@keyframes waveAnim2{0%,100%{d:path("M0,130 C300,60 600,170 900,90 C1100,50 1300,150 1440,130 L1440,200 L0,200 Z")}50%{d:path("M0,90 C300,160 600,50 900,140 C1100,170 1300,70 1440,90 L1440,200 L0,200 Z")}100%{d:path("M0,130 C300,60 600,170 900,90 C1100,50 1300,150 1440,130 L1440,200 L0,200 Z")}}
+
+/* SCANLINE */
+.scan-line{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.scan-line div{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.03),transparent);animation:scanLine 7s linear infinite}
+
+/* LIGHTBOX */
+.lightbox{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center}
+.lightbox.open{display:flex}
+.lightbox img{max-width:90vw;max-height:85vh;object-fit:contain}
+.lightbox-btn{position:absolute;width:3rem;height:3rem;border-radius:50%;background:rgba(255,255,255,0.05);border:none;color:rgba(255,255,255,0.6);font-size:1.5rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s;z-index:10}
+.lightbox-btn:hover{background:rgba(255,255,255,0.1);color:#fff}
+.lightbox-close{top:1.5rem;right:1.5rem}
+.lightbox-prev{left:1rem}
+@media(min-width:768px){.lightbox-prev{left:2rem}}
+.lightbox-next{right:1rem}
+@media(min-width:768px){.lightbox-next{right:2rem}}
+
+/* WHATSAPP FLOAT */
+.wa-float{position:fixed;bottom:1.5rem;left:1.5rem;z-index:40;width:3.5rem;height:3.5rem;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;box-shadow:0 4px 20px rgba(37,211,102,0.4);transition:all 0.3s}
+.wa-float:hover{transform:scale(1.1);box-shadow:0 4px 30px rgba(37,211,102,0.6)}
+
+/* ANIMATE ON SCROLL */
+.aos{opacity:0;transform:translateY(50px);transition:all 0.8s cubic-bezier(0.22,0.61,0.36,1)}
+.aos.scale{transform:scale(0.92)}
+.aos.visible{opacity:1;transform:translateY(0) scale(1)}
+</style>
+</head>
+<body>
+
+<!-- CANVAS STAR FIELD -->
+<canvas id="starfield" style="position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.7"></canvas>
+
+<!-- SCAN LINE -->
+<div class="scan-line"><div></div></div>
+
+<!-- NAVBAR -->
+<nav class="nav" id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">
+      <div class="nav-logo-icon">I</div>
+      <span>INNOA</span>
+    </a>
+    <div class="nav-links">
+      <a href="#hero">Inicio</a>
+      <a href="#about">Sobre INNOA</a>
+      <a href="#services">Soluciones</a>
+      <a href="#clients">Clientes</a>
+      <a href="#gallery">Galería</a>
+      <a href="#team">Equipo</a>
+      <a href="#education">Educación</a>
+      <a href="#contact">Contacto</a>
+      <a href="#contact" class="nav-cta">Solicitar Diagnóstico</a>
+    </div>
+    <button class="nav-hamburger" id="menuBtn" aria-label="Menu">&#9776;</button>
+  </div>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="#hero">Inicio</a>
+    <a href="#about">Sobre INNOA</a>
+    <a href="#services">Soluciones</a>
+    <a href="#clients">Clientes</a>
+    <a href="#gallery">Galería</a>
+    <a href="#team">Equipo</a>
+    <a href="#education">Educación</a>
+    <a href="#contact">Contacto</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="section" style="min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden">
+  <div class="glow" style="top:33%;left:20%;width:500px;height:500px;background:rgba(179,71,234,0.07);filter:blur(160px);animation:pulse 4s infinite"></div>
+  <div class="glow" style="bottom:25%;right:20%;width:400px;height:400px;background:rgba(179,71,234,0.04);filter:blur(140px);animation:pulse 4s infinite 3s"></div>
+  <div style="position:relative;z-index:10;max-width:72rem;margin:0 auto;padding:0 1.5rem;text-align:center">
+    <div class="aos" style="margin-bottom:2rem">
+      <span style="display:inline-flex;align-items:center;gap:0.75rem;padding:0.625rem 1.25rem;border-radius:9999px;border:1px solid rgba(176,176,192,0.2);background:rgba(176,176,192,0.04);font-size:0.875rem;color:var(--metallic-light);letter-spacing:0.15em;text-transform:uppercase">&#9889; Hub Tecnológico Multidisciplinario &#9889;</span>
+    </div>
+    <div class="aos" style="transition-delay:0.1s">
+      <h1 style="font-size:clamp(4.5rem,12vw,10rem);font-weight:900;letter-spacing:-0.05em;line-height:1;margin-bottom:1.5rem">
+        <span class="text-reflection-metallic" data-text="INNOA">INNOA</span>
+      </h1>
+    </div>
+    <div class="aos" style="transition-delay:0.2s">
+      <p style="font-size:clamp(1.5rem,4vw,2.5rem);font-weight:200;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,240,240,0.6);margin-bottom:1.25rem">Mentes inquietas, clientes audaces.</p>
+    </div>
+    <div class="aos" style="transition-delay:0.3s">
+      <p style="font-size:1.0625rem;color:var(--muted-fg);max-width:42rem;margin:0 auto 3rem;line-height:1.7">Soluciones de alta tecnología para empresas que necesitan resultados excepcionales. Inteligencia Artificial, Automatización, Realidad Aumentada y Desarrollo Web de clase mundial.</p>
+    </div>
+    <div class="aos" style="transition-delay:0.4s;display:flex;flex-wrap:wrap;justify-content:center;gap:1rem">
+      <a href="#clients" class="btn-primary" style="text-decoration:none">Ver Nuestros Clientes &#8594;</a>
+      <a href="#contact" class="btn-outline" style="text-decoration:none">Solicitar Propuesta</a>
+    </div>
+    <div class="aos" style="transition-delay:0.5s;display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;max-width:36rem;margin:3rem auto 0">
+      <div style="text-align:center"><div style="font-size:clamp(1.875rem,3vw,2.25rem);font-weight:900" class="text-metallic-shine">50+</div><div style="font-size:0.6875rem;color:var(--muted-fg);margin-top:0.5rem;text-transform:uppercase;letter-spacing:0.15em">Proyectos Empresariales</div></div>
+      <div style="text-align:center"><div style="font-size:clamp(1.875rem,3vw,2.25rem);font-weight:900" class="text-metallic-shine">500+</div><div style="font-size:0.6875rem;color:var(--muted-fg);margin-top:0.5rem;text-transform:uppercase;letter-spacing:0.15em">Docentes Capacitados</div></div>
+      <div style="text-align:center"><div style="font-size:clamp(1.875rem,3vw,2.25rem);font-weight:900" class="text-metallic-shine">7+</div><div style="font-size:0.6875rem;color:var(--muted-fg);margin-top:0.5rem;text-transform:uppercase;letter-spacing:0.15em">Sectores Industriales</div></div>
+      <div style="text-align:center"><div style="font-size:clamp(1.875rem,3vw,2.25rem);font-weight:900" class="text-metallic-shine">24/7</div><div style="font-size:0.6875rem;color:var(--muted-fg);margin-top:0.5rem;text-transform:uppercase;letter-spacing:0.15em">Agentes IA Activos</div></div>
+    </div>
+  </div>
+  <div style="position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);z-index:10;animation:bounce 2.5s infinite;color:rgba(136,136,136,0.3);font-size:2rem">&#8964;</div>
+  <!-- Wave -->
+  <div class="wave">
+    <svg viewBox="0 0 1440 200" preserveAspectRatio="none">
+      <defs><linearGradient id="wv" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#b347ea" stop-opacity="0"/><stop offset="30%" stop-color="#b347ea" stop-opacity="0.15"/><stop offset="50%" stop-color="#7c3aed" stop-opacity="0.25"/><stop offset="70%" stop-color="#b347ea" stop-opacity="0.15"/><stop offset="100%" stop-color="#b347ea" stop-opacity="0"/></linearGradient></defs>
+      <path class="wave-path" fill="url(#wv)" d="M0,100 C360,180 720,20 1080,100 C1260,140 1380,80 1440,100 L1440,200 L0,200 Z"/>
+      <path class="wave-path2" fill="url(#wv)" opacity="0.4" d="M0,130 C300,60 600,170 900,90 C1100,50 1300,150 1440,130 L1440,200 L0,200 Z"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="section grid-pattern">
+  <div class="section-inner">
+    <div class="aos">
+      <span class="section-tag">Sobre INNOA</span>
+      <h2 class="section-title">Tecnología que <span class="text-metallic-shine">transforma</span> empresas</h2>
+      <p style="font-size:1.125rem;color:var(--muted-fg);max-width:48rem;line-height:1.7;margin-bottom:3rem">Somos un hub tecnológico multidisciplinario con sede en Jujuy y alcance nacional. Nuestro equipo integra ingenieros, diseñadores y pedagogos universitarios que desarrollan soluciones de clase mundial en Inteligencia Artificial, Automatización, Realidad Aumentada y Desarrollo Web.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-bottom:3rem">
+      <div class="card card-glow aos scale" style="padding:2rem;position:relative;transition-delay:0.1s"><div style="position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.1),transparent);opacity:0;transition:opacity 0.7s" class="card-line"></div><p style="font-size:2.25rem;color:var(--metallic-light);margin-bottom:1.25rem">&#129504;</p><h3 style="font-size:1.25rem;font-weight:700;margin-bottom:0.75rem">Innovación Basada en IA</h3><p style="color:var(--muted-fg);line-height:1.7;font-size:0.9375rem">Cada solución que diseñamos está potenciada por inteligencia artificial. No seguimos tendencias, las creamos. Nuestro stack tecnológico incluye agentes autónomos, procesamiento de lenguaje natural y modelos generativos aplicados a negocios reales.</p></div>
+      <div class="card card-glow aos scale" style="padding:2rem;position:relative;transition-delay:0.2s"><div style="position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.1),transparent);opacity:0;transition:opacity 0.7s" class="card-line"></div><p style="font-size:2.25rem;color:var(--metallic-light);margin-bottom:1.25rem">&#128640;</p><h3 style="font-size:1.25rem;font-weight:700;margin-bottom:0.75rem">Rigor Académico + Velocidad</h3><p style="color:var(--muted-fg);line-height:1.7;font-size:0.9375rem">Somos profesores universitarios y especialistas técnicos. Eso significa que cada proyecto cuenta con validación científica, metodología comprobada y la velocidad de ejecución que su empresa necesita para competir.</p></div>
+      <div class="card card-glow aos scale" style="padding:2rem;position:relative;transition-delay:0.3s"><div style="position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.1),transparent);opacity:0;transition:opacity 0.7s" class="card-line"></div><p style="font-size:2.25rem;color:var(--metallic-light);margin-bottom:1.25rem">&#127919;</p><h3 style="font-size:1.25rem;font-weight:700;margin-bottom:0.75rem">Transformación Medible</h3><p style="color:var(--muted-fg);line-height:1.7;font-size:0.9375rem">No vendemos horas, vendemos resultados. Implementamos KPIs desde el día uno y cada solución está diseñada para generar ROI demostrable. Reducción de costos operativos, aumento de conversión y optimización de procesos.</p></div>
+    </div>
+    <!-- Vision -->
+    <div class="aos" style="position:relative;padding:2.5rem 3.5rem;border-radius:1rem;border:1px solid rgba(255,255,255,0.05);background:linear-gradient(to bottom right,rgba(255,255,255,0.02),transparent);margin-bottom:3rem;overflow:hidden">
+      <div class="grid-pattern" style="position:absolute;inset:0;opacity:0.3"></div>
+      <blockquote style="font-size:clamp(1.875rem,4vw,3.125rem);font-weight:900;text-align:center;line-height:1.3;position:relative;z-index:1">
+        <span style="color:rgba(255,255,255,0.2)">&ldquo;</span> No instalamos software, instalamos <span class="text-metallic-shine">capacidades</span>. <span style="color:rgba(255,255,255,0.2)">&rdquo;</span>
+      </blockquote>
+      <p style="text-align:center;color:var(--muted-fg);margin-top:1.5rem;font-size:0.875rem;text-transform:uppercase;letter-spacing:0.2em;position:relative;z-index:1">Nuestra filosofía — Empoderamos a su organización para ser dueña de su tecnología</p>
+    </div>
+    <div class="aos" style="text-align:center;margin-bottom:3rem">
+      <h3 style="font-size:clamp(1.5rem,3vw,1.875rem);font-weight:700;margin-bottom:0.75rem">Tres Pilares, Una Fuerza</h3>
+      <p style="color:var(--muted-fg);max-width:36rem;margin:0 auto">La combinación que ninguna otra agencia puede ofrecer</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem">
+      <div class="card aos scale" style="padding:2rem;text-align:center;transition-delay:0.1s"><div style="width:4rem;height:4rem;border-radius:1rem;background:linear-gradient(to bottom right,rgba(58,58,74,0.2),rgba(138,138,154,0.2));display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.875rem">&#128295;</div><h4 style="font-size:1.125rem;font-weight:700;margin-bottom:0.5rem">Ingeniería de Software</h4><p style="color:var(--muted-fg);font-size:0.875rem;line-height:1.6">Desarrollo full-stack, AR/VR, automatización y arquitectura de sistemas</p></div>
+      <div class="card aos scale" style="padding:2rem;text-align:center;transition-delay:0.2s"><div style="width:4rem;height:4rem;border-radius:1rem;background:linear-gradient(to bottom right,rgba(58,58,74,0.2),rgba(138,138,154,0.2));display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.875rem">&#128065;</div><h4 style="font-size:1.125rem;font-weight:700;margin-bottom:0.5rem">Diseño Estratégico</h4><p style="color:var(--muted-fg);font-size:0.875rem;line-height:1.6">UX/UI, branding corporativo, motion design e identidad visual de alto impacto</p></div>
+      <div class="card aos scale" style="padding:2rem;text-align:center;transition-delay:0.3s"><div style="width:4rem;height:4rem;border-radius:1rem;background:linear-gradient(to bottom right,rgba(58,58,74,0.2),rgba(138,138,154,0.2));display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.875rem">&#127891;</div><h4 style="font-size:1.125rem;font-weight:700;margin-bottom:0.5rem">Pedagogía Universitaria</h4><p style="color:var(--muted-fg);font-size:0.875rem;line-height:1.6">Investigación, docencia 4.0, diseño instruccional y capacitación corporativa</p></div>
+    </div>
+    <div class="aos" style="margin-top:3.5rem;text-align:center;padding:1.5rem;border-radius:0.75rem;background:rgba(26,26,46,0.4);border:1px solid var(--border)">
+      <p style="color:var(--muted-fg);font-size:0.875rem;line-height:1.7">Con diplomaturas y posgrados en <strong style="color:var(--fg)">Educación 4.0</strong> en Jujuy, Salta y Misiones, <strong style="color:var(--fg)">Inteligencia Artificial</strong> y <strong style="color:var(--fg)">Tecnologías Inmersivas</strong>. Investigamos, educamos y ejecutamos al más alto nivel.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="section" style="overflow:hidden;position:relative">
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent,rgba(179,71,234,0.015),transparent)"></div>
+  <div class="section-inner" style="position:relative;z-index:1">
+    <div class="aos" style="text-align:center;margin-bottom:5rem">
+      <span class="section-tag">Nuestros Ejes de Solución</span>
+      <h2 class="section-title">Nuestros Ejes de Solución — <span class="text-metallic-shine">Alta Tecnología</span></h2>
+      <p style="font-size:1.125rem;color:var(--muted-fg);max-width:42rem;margin:0 auto">Resolvemos problemas complejos que las agencias tradicionales no pueden abordar. Tecnología de frontera aplicada a resultados de negocio.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.5rem">
+      <div class="card card-glow aos scale" style="padding:2rem 2.5rem;position:relative;transition-delay:0.1s;cursor:default">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:1.5rem"><div style="width:3.5rem;height:3.5rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:1.75rem">&#129302;</div><span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:0.25rem 0.75rem;border-radius:9999px;background:rgba(255,255,255,0.05);color:var(--metallic-light)">80% menos tareas manuales</span></div>
+        <h3 style="font-size:1.25rem;font-weight:700;margin-bottom:1rem">IA & Automatización Empresarial</h3>
+        <p style="color:var(--muted-fg);line-height:1.7;font-size:0.9375rem">Despliegue de Agentes de IA autónomos para calificación de leads, atención al cliente 24/7 y automatización de procesos críticos. Reducimos la carga operativa manual hasta en un 80%, permitiendo a su equipo enfocarse en decisiones estratégicas de alto valor.</p>
+      </div>
+      <div class="card card-glow aos scale" style="padding:2rem 2.5rem;position:relative;transition-delay:0.2s;cursor:default">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:1.5rem"><div style="width:3.5rem;height:3.5rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:1.75rem">&#127916;</div><span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:0.25rem 0.75rem;border-radius:9999px;background:rgba(255,255,255,0.05);color:var(--metallic-light)">3 seg para captar atención</span></div>
+        <h3 style="font-size:1.25rem;font-weight:700;margin-bottom:1rem">Marketing & Branding con IA</h3>
+        <p style="color:var(--muted-fg);line-height:1.7;font-size:0.9375rem">Creación de contenido inmersivo de clase global (video, imagen, copywriting) potenciado por IA generativa. Dominamos la atención en los primeros 3 segundos con piezas que compiten con los estándares más exigentes del mercado internacional.</p>
+      </div>
+      <div class="card card-glow aos scale" style="padding:2rem 2.5rem;position:relative;transition-delay:0.3s;cursor:default">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:1.5rem"><div style="width:3.5rem;height:3.5rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:1.75rem">&#127891;</div><span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:0.25rem 0.75rem;border-radius:9999px;background:rgba(255,255,255,0.05);color:var(--metallic-light)">500+ docentes formados</span></div>
+        <h3 style="font-size:1.25rem;font-weight:700;margin-bottom:1rem">Transformación & Capacitación Corporativa</h3>
+        <p style="color:var(--muted-fg);line-height:1.7;font-size:0.9375rem">Programas de capacitación con metodología ABP (Aprendizaje Basado en Proyectos), automatización de planificaciones, generación de rúbricas y transformación de la matriz de competencias de su organización.</p>
+      </div>
+      <div class="card card-glow aos scale" style="padding:2rem 2.5rem;position:relative;transition-delay:0.4s;cursor:default">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:1.5rem"><div style="width:3.5rem;height:3.5rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:1.75rem">&#128187;</div><span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:0.25rem 0.75rem;border-radius:9999px;background:rgba(255,255,255,0.05);color:var(--metallic-light)">Experiencias inmersivas</span></div>
+        <h3 style="font-size:1.25rem;font-weight:700;margin-bottom:1rem">Desarrollo de Software & Realidad Aumentada</h3>
+        <p style="color:var(--muted-fg);line-height:1.7;font-size:0.9375rem">Experiencias web de alto rendimiento, aplicaciones a medida y capas de Realidad Aumentada para productos, capacitación técnica y marketing inmersivo. Conectamos el mundo físico con el digital de formas que su competencia aún no imagina.</p>
+      </div>
+    </div>
+  </div>
+  <div class="wave flip">
+    <svg viewBox="0 0 1440 200" preserveAspectRatio="none">
+      <defs><linearGradient id="wv2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#b347ea" stop-opacity="0"/><stop offset="30%" stop-color="#b347ea" stop-opacity="0.15"/><stop offset="50%" stop-color="#7c3aed" stop-opacity="0.25"/><stop offset="70%" stop-color="#b347ea" stop-opacity="0.15"/><stop offset="100%" stop-color="#b347ea" stop-opacity="0"/></linearGradient></defs>
+      <path class="wave-path" fill="url(#wv2)" d="M0,100 C360,180 720,20 1080,100 C1260,140 1380,80 1440,100 L1440,200 L0,200 Z"/>
+    </svg>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<section id="clients" class="section grid-pattern">
+  <div class="section-inner">
+    <div class="aos" style="text-align:center;margin-bottom:5rem">
+      <span class="section-tag">Casos de Éxito</span>
+      <h2 class="section-title">Empresas que <span class="text-metallic-shine">confían</span> en INNOA</h2>
+      <p style="font-size:1.125rem;color:var(--muted-fg);max-width:48rem;margin:0 auto">Cada proyecto es una historia de transformación digital. Alta tecnología aplicada a problemas empresariales reales con resultados medibles.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1.5rem">
+
+      <!-- Minera Exar -->
+      <div class="card aos scale" style="padding:2rem 2.5rem;transition-delay:0.1s">
+        <div style="display:flex;flex-wrap:wrap;gap:2rem">
+          <div style="flex:1;min-width:280px">
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem"><div style="width:3rem;height:3rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:1.5rem">&#127963;</div><div><span style="font-size:0.75rem;color:var(--metallic-light);font-weight:700;text-transform:uppercase;letter-spacing:0.05em">Sector Minería</span><h3 style="font-size:1.125rem;font-weight:700">Minera Exar & Mina Pirquita</h3></div></div>
+            <div style="padding:0.75rem;border-radius:0.75rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);margin-top:1rem"><p style="font-size:0.75rem;color:var(--metallic-light);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem">Resultado</p><p style="font-size:0.875rem;color:rgba(240,240,240,0.8)">Experiencia inmersiva que redefinió la comunicación minera regional</p></div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem"><span style="padding:0.25rem 0.625rem;border-radius:0.375rem;background:var(--secondary);font-size:0.75rem;color:var(--muted-fg);border:1px solid var(--border)">Realidad Aumentada</span><span style="padding:0.25rem 0.625rem;border-radius:0.375rem;background:var(--secondary);font-size:0.75rem;color:var(--muted-fg);border:1px solid var(--border)">Visualización 3D</span><span style="padding:0.25rem 0.625rem;border-radius:0.375rem;background:var(--secondary);font-size:0.75rem;color:var(--muted-fg);border:1px solid var(--border)">Comunicación Institucional</span></div>
+          </div>
+          <div style="flex:2;min-width:300px"><p style="color:var(--muted-fg);line-height:1.8;font-size:0.9375rem">Desarrollamos software de Realidad Aumentada para la comunicación de operaciones mineras a la sociedad jujeña en exposiciones institucionales. La solución permitió visualizar procesos subterráneos en 3D interactivo, generando una experiencia inmersiva que transformó la relación entre la empresa y la comunidad. Tecnología de vanguardia aplicada a la transparencia corporativa.</p></div>
+        </div>
+      </div>
+
+      <!-- Secretaría de Seguridad -->
+      <div class="card aos scale" style="padding:2rem 2.5rem;transition-delay:0.15s">
+        <div style="display:flex;flex-wrap:wrap;gap:2rem">
+          <div style="flex:1;min-width:280px">
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem"><div style="width:3rem;height:3rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:1.5rem">&#128737;</div><div><span style="font-size:0.75rem;color:var(--metallic-light);font-weight:700;text-transform:uppercase;letter-spacing:0.05em">Gobierno — Seguridad Vial</span><h3 style="font-size:1.125rem;font-weight:700">Secretaría de Seguridad de Jujuy</h3></div></div>
+            <div style="padding:0.75rem;border-radius:0.75rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);margin-top:1rem"><p style="font-size:0.75rem;color:var(--metallic-light);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem">Resultado</p><p style="font-size:0.875rem;color:rgba(240,240,240,0.8)">Educación vial gamificada con impacto medible a nivel provincial</p></div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem"><span style="padding:0.25rem 0.625rem;border-radius:0.375rem;background:var(--secondary);font-size:0.75rem;color:var(--muted-fg);border:1px solid var(--border)">Gamificación</span><span style="padding:0.25rem 0.625rem;border-radius:0.375rem;background:var(--secondary);font-size:0.75rem;color:var(--muted-fg);border:1px solid var(--border)">Software Educativo</span><span style="padding:0.25rem 0.625rem;border-radius:0.375rem;background:var(--secondary);font-size:0.75rem;color:var(--muted-fg);border:1px solid var(--border)">Escala Gubernamental</span></div>
+          </div>
+          <div style="flex:2;min-width:300px"><p style="color:var(--muted-fg);line-height:1.8;font-size:0.9375rem">Creamos un sistema educativo basado en gamificación y quizzes interactivos para el aprendizaje de la Ley Nacional de Tránsito. La plataforma transformó la capacitación vial tradicional en una experiencia lúdica y efectiva, logrando mayor retención de conocimiento y compromiso por parte de los ciudadanos.</p></div>
+        </div>
+      </div>
+
+      <!-- Corredor Biocéanico -->
+      <div class="card aos scale" style="padding:2rem 2.5rem;transition-delay:0.2s">
+        <div style="display:flex;flex-wrap:wrap;gap:2rem">
+          <div style="flex:1;min-width:280px">
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem"><div style="width:3rem;height:3rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:1.5rem">&#127758;</div><div><span style="font-size:0.75rem;color:var(--metallic-light);font-weight:700;text-transform:uppercase;letter-spacing:0.05em">Geopolítica — Conectividad Regional</span><h3 style="font-size:1.125rem;font-weight:700">Corredor Biocéanico Trópico de Capricornio</h3></div></div>
+            <div style="padding:0.75rem;border-radius:0.75rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);margin-top:1rem"><p style="font-size:0.75rem;color:var(--metallic-light);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem">Resultado</p><p style="font-size:0.875rem;color:rgba(240,240,240,0.8)">Posicionamiento estratégico en dos idiomas para alcance continental</p></div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem"><span style="padding:0.25rem 0.625rem;border-radius:0.375rem;background:var(--secondary);font-size:0.75rem;color:var(--muted-fg);border:1px solid var(--border)">Producción Audiovisual</span><span style="padding:0.25rem 0.625rem;border-radius:0.375rem;background:var(--secondary);font-size:0.75rem;color:var(--muted-fg);border:1px solid var(--border)">Contenido Bilingüe</span></div>
+            <a href="https://corredorbioceanico.org/es/" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.5rem;margin-top:1rem;font-size:0.875rem;color:var(--metallic-light);font-weight:500">Ver proyecto en vivo &#8599;</a>
+          </div>
+          <div style="flex:2;min-width:300px"><p style="color:var(--muted-fg);line-height:1.8;font-size:0.9375rem">Producción audiovisual técnica y estratégica bilingüe (español y portugués) para el posicionamiento geopolítico regional del corredor bioceánico. Desarrollamos contenido que conecta naciones, proyecta influencia comercial y fortalece la identidad del corredor como eje de integración sudamericana.</p></div>
+        </div>
+      </div>
+
+      <!-- Asociación de Jubilados -->
+      <div class="card aos scale" style="padding:2rem 2.5rem;transition-delay:0.25s">
+        <div style="display:flex;flex-wrap:wrap;gap:2rem">
+          <div style="flex:1;min-width:280px">
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem"><div style="width:3rem;height:3rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:1.5rem">&#128101;</div><div><span style="font-size:0.75rem;color:var(--metallic-light);font-weight:700;text-transform:uppercase;letter-spacing:0.05em">Gestión Masiva — Comunidad</span><h3 style="font-size:1.125rem;font-weight:700">Asociación de Jubilados de Jujuy</h3></div></div>
+            <div style="padding:0.75rem;border-radius:0.75rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);margin-top:1rem"><p style="font-size:0.75rem;color:var(--metallic-light);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem">Resultado</p><p style="font-size:0.875rem;color:rgba(240,240,240,0.8)">1.000+ socios gestionados digitalmente con identidad renovada</p></div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem"><span style="padding:0.25rem 0.625rem;border-radius:0.375rem;background:var(--secondary);font-size:0.75rem;color:var(--muted-fg);border:1px solid var(--border)">Rebranding Integral</span><span style="padding:0.25rem 0.625rem;border-radius:0.375rem;background:var(--secondary);font-size:0.75rem;color:var(--muted-fg);border:1px solid var(--border)">Software de Gestión</span></div>
+            <a href="https://lacasadeljubiladojujuy.com/" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.5rem;margin-top:1rem;font-size:0.875rem;color:var(--metallic-light);font-weight:500">Ver proyecto en vivo &#8599;</a>
+          </div>
+          <div style="flex:2;min-width:300px"><p style="color:var(--muted-fg);line-height:1.8;font-size:0.9375rem">Ejecutamos un rebranding integral, gestión de redes sociales y desarrollo de software de gestión para una comunidad de más de 1.000 socios activos. Digitalizamos procesos administrativos, fortalecimos la identidad visual de la institución y creamos canales de comunicación directa con cada socio.</p></div>
+        </div>
+      </div>
+
+      <!-- Monina Telas -->
+      <div class="card aos scale" style="padding:2rem 2.5rem;transition-delay:0.3s">
+        <div style="display:flex;flex-wrap:wrap;gap:2rem">
+          <div style="flex:1;min-width:280px">
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem"><div style="width:3rem;height:3rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:1.5rem">&#128722;</div><div><span style="font-size:0.75rem;color:var(--metallic-light);font-weight:700;text-transform:uppercase;letter-spacing:0.05em">Retail — Moda y Textil</span><h3 style="font-size:1.125rem;font-weight:700">Monina Telas</h3></div></div>
+            <div style="padding:0.75rem;border-radius:0.75rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);margin-top:1rem"><p style="font-size:0.75rem;color:var(--metallic-light);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem">Resultado</p><p style="font-size:0.875rem;color:rgba(240,240,240,0.8)">Transformación digital completa con estrategia de conversión activa</p></div>
+            <a href="https://www.instagram.com/moninatelas/" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.5rem;margin-top:1rem;font-size:0.875rem;color:var(--metallic-light);font-weight:500">Ver proyecto en vivo &#8599;</a>
+          </div>
+          <div style="flex:2;min-width:300px"><p style="color:var(--muted-fg);line-height:1.8;font-size:0.9375rem">Diseñamos su presencia web completa y ejecutamos una estrategia de redes sociales orientada a conversión y catálogo digital. Optimizamos el embudo de ventas para el sector moda, generando tráfico cualificado y transformando seguidores en clientes con contenido estratégico y visual de alto impacto.</p></div>
+        </div>
+      </div>
+
+      <!-- Cine Alfa -->
+      <div class="card aos scale" style="padding:2rem 2.5rem;transition-delay:0.35s">
+        <div style="display:flex;flex-wrap:wrap;gap:2rem">
+          <div style="flex:1;min-width:280px">
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem"><div style="width:3rem;height:3rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:1.5rem">&#127916;</div><div><span style="font-size:0.75rem;color:var(--metallic-light);font-weight:700;text-transform:uppercase;letter-spacing:0.05em">Entretenimiento — Audiovisual</span><h3 style="font-size:1.125rem;font-weight:700">Cine Alfa</h3></div></div>
+            <div style="padding:0.75rem;border-radius:0.75rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);margin-top:1rem"><p style="font-size:0.75rem;color:var(--metallic-light);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem">Resultado</p><p style="font-size:0.875rem;color:rgba(240,240,240,0.8)">Comunicación visual transformada con IA generativa y material multimedia de vanguardia</p></div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem"><span style="padding:0.25rem 0.625rem;border-radius:0.375rem;background:var(--secondary);font-size:0.75rem;color:var(--muted-fg);border:1px solid var(--border)">IA Generativa</span><span style="padding:0.25rem 0.625rem;border-radius:0.375rem;background:var(--secondary);font-size:0.75rem;color:var(--muted-fg);border:1px solid var(--border)">Cartelería Cinematográfica</span></div>
+          </div>
+          <div style="flex:2;min-width:300px"><p style="color:var(--muted-fg);line-height:1.8;font-size:0.9375rem">Implementamos una estrategia integral de comunicación potenciada por IA Generativa: desde la producción de material multimedia de alto impacto hasta la creación de piezas audiovisuales y cartelería cinematográfica vanguardista. Fusionamos creatividad humana con inteligencia artificial para transformar completamente la comunicación visual de Cine Alfa.</p></div>
+        </div>
+      </div>
+
+      <!-- El Chañar -->
+      <div class="card aos scale" style="padding:2rem 2.5rem;transition-delay:0.4s">
+        <div style="display:flex;flex-wrap:wrap;gap:2rem">
+          <div style="flex:1;min-width:280px">
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem"><div style="width:3rem;height:3rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:1.5rem">&#128200;</div><div><span style="font-size:0.75rem;color:var(--metallic-light);font-weight:700;text-transform:uppercase;letter-spacing:0.05em">Agro-Industrial</span><h3 style="font-size:1.125rem;font-weight:700">El Chañar</h3></div></div>
+            <div style="padding:0.75rem;border-radius:0.75rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);margin-top:1rem"><p style="font-size:0.75rem;color:var(--metallic-light);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem">Resultado</p><p style="font-size:0.875rem;color:rgba(240,240,240,0.8)">Ecosistema digital completo para el sector agroindustrial</p></div>
+          </div>
+          <div style="flex:2;min-width:300px"><p style="color:var(--muted-fg);line-height:1.8;font-size:0.9375rem">Gestionamos actualmente su identidad digital completa: presencia web institucional, estrategia de redes sociales y posicionamiento de marca en el sector agroindustrial. Implementamos un ecosistema digital que fortalece su conexión con el mercado y proyecta profesionalismo en cada punto de contacto.</p></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" class="section" style="overflow:hidden;position:relative">
+  <div class="section-inner" style="position:relative;z-index:1">
+    <div class="aos" style="text-align:center;margin-bottom:4rem">
+      <span class="section-tag">Galería Visual</span>
+      <h2 class="section-title">Nuestro <span class="text-metallic-shine">Trabajo</span> en Acción</h2>
+      <p style="font-size:1.125rem;color:var(--muted-fg);max-width:42rem;margin:0 auto">Cada imagen cuenta una historia de innovación. Hacé clic para explorar.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem" id="galleryGrid">
+      <div class="gallery-item aos scale" onclick="openLightbox(0)" style="aspect-ratio:1;border-radius:0.75rem;overflow:hidden;cursor:pointer;border:1px solid var(--border);position:relative;transition-delay:0.1s"><img src="/images/WhatsApp Image 2026-04-30 at 16.26.31.jpeg" alt="Corredor Biocéanico" style="width:100%;height:100%;object-fit:cover;transition:transform 0.7s" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);opacity:0;transition:opacity 0.5s;display:flex;flex-direction:column;justify-content:flex-end;padding:1rem" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0"><span style="font-size:0.625rem;color:var(--metallic-light);font-weight:700;text-transform:uppercase;letter-spacing:0.15em">Audiovisual</span><p style="font-size:0.875rem;font-weight:600;color:#fff">Corredor Biocéanico</p></div></div>
+      <div class="gallery-item aos scale" onclick="openLightbox(1)" style="aspect-ratio:1;border-radius:0.75rem;overflow:hidden;cursor:pointer;border:1px solid var(--border);position:relative;transition-delay:0.15s"><img src="/images/WhatsApp Image 2026-04-30 at 16.26.32.jpeg" alt="Asociación de Jubilados" style="width:100%;height:100%;object-fit:cover;transition:transform 0.7s" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);opacity:0;transition:opacity 0.5s;display:flex;flex-direction:column;justify-content:flex-end;padding:1rem" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0"><span style="font-size:0.625rem;color:var(--metallic-light);font-weight:700;text-transform:uppercase;letter-spacing:0.15em">Branding</span><p style="font-size:0.875rem;font-weight:600;color:#fff">Asociación de Jubilados</p></div></div>
+      <div class="gallery-item aos scale" onclick="openLightbox(2)" style="aspect-ratio:1;border-radius:0.75rem;overflow:hidden;cursor:pointer;border:1px solid var(--border);position:relative;transition-delay:0.2s"><img src="/images/WhatsApp Image 2026-04-30 at 16.26.33.jpeg" alt="Monina Telas" style="width:100%;height:100%;object-fit:cover;transition:transform 0.7s" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);opacity:0;transition:opacity 0.5s;display:flex;flex-direction:column;justify-content:flex-end;padding:1rem" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0"><span style="font-size:0.625rem;color:var(--metallic-light);font-weight:700;text-transform:uppercase;letter-spacing:0.15em">E-Commerce</span><p style="font-size:0.875rem;font-weight:600;color:#fff">Monina Telas</p></div></div>
+      <div class="gallery-item aos scale" onclick="openLightbox(3)" style="aspect-ratio:1;border-radius:0.75rem;overflow:hidden;cursor:pointer;border:1px solid var(--border);position:relative;transition-delay:0.25s"><img src="/images/WhatsApp Image 2026-04-30 at 16.26.33 (1).jpeg" alt="Cine Alfa" style="width:100%;height:100%;object-fit:cover;transition:transform 0.7s" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);opacity:0;transition:opacity 0.5s;display:flex;flex-direction:column;justify-content:flex-end;padding:1rem" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0"><span style="font-size:0.625rem;color:var(--metallic-light);font-weight:700;text-transform:uppercase;letter-spacing:0.15em">Entretenimiento</span><p style="font-size:0.875rem;font-weight:600;color:#fff">Cine Alfa — IA Generativa</p></div></div>
+      <div class="gallery-item aos scale" onclick="openLightbox(4)" style="aspect-ratio:1;border-radius:0.75rem;overflow:hidden;cursor:pointer;border:1px solid var(--border);position:relative;transition-delay:0.3s"><img src="/images/project-mining.png" alt="Minera Exar" style="width:100%;height:100%;object-fit:cover;transition:transform 0.7s" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);opacity:0;transition:opacity 0.5s;display:flex;flex-direction:column;justify-content:flex-end;padding:1rem" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0"><span style="font-size:0.625rem;color:var(--metallic-light);font-weight:700;text-transform:uppercase;letter-spacing:0.15em">AR / VR</span><p style="font-size:0.875rem;font-weight:600;color:#fff">Minera Exar — Realidad Aumentada</p></div></div>
+      <div class="gallery-item aos scale" onclick="openLightbox(5)" style="aspect-ratio:1;border-radius:0.75rem;overflow:hidden;cursor:pointer;border:1px solid var(--border);position:relative;transition-delay:0.35s"><img src="/images/project-education.png" alt="Educación Vial" style="width:100%;height:100%;object-fit:cover;transition:transform 0.7s" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);opacity:0;transition:opacity 0.5s;display:flex;flex-direction:column;justify-content:flex-end;padding:1rem" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0"><span style="font-size:0.625rem;color:var(--metallic-light);font-weight:700;text-transform:uppercase;letter-spacing:0.15em">Software</span><p style="font-size:0.875rem;font-weight:600;color:#fff">Educación Vial — Gamificación</p></div></div>
+      <div class="gallery-item aos scale" onclick="openLightbox(6)" style="aspect-ratio:1;border-radius:0.75rem;overflow:hidden;cursor:pointer;border:1px solid var(--border);position:relative;transition-delay:0.4s"><img src="/images/project-webdev.png" alt="Desarrollo Web" style="width:100%;height:100%;object-fit:cover;transition:transform 0.7s" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);opacity:0;transition:opacity 0.5s;display:flex;flex-direction:column;justify-content:flex-end;padding:1rem" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0"><span style="font-size:0.625rem;color:var(--metallic-light);font-weight:700;text-transform:uppercase;letter-spacing:0.15em">Web Dev</span><p style="font-size:0.875rem;font-weight:600;color:#fff">Desarrollo Web — Plataformas</p></div></div>
+      <div class="gallery-item aos scale" onclick="openLightbox(7)" style="aspect-ratio:1;border-radius:0.75rem;overflow:hidden;cursor:pointer;border:1px solid var(--border);position:relative;transition-delay:0.45s"><img src="/images/tech-bg.png" alt="INNOA Infraestructura" style="width:100%;height:100%;object-fit:cover;transition:transform 0.7s" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);opacity:0;transition:opacity 0.5s;display:flex;flex-direction:column;justify-content:flex-end;padding:1rem" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0"><span style="font-size:0.625rem;color:var(--metallic-light);font-weight:700;text-transform:uppercase;letter-spacing:0.15em">Innovación</span><p style="font-size:0.875rem;font-weight:600;color:#fff">INNOA — Infraestructura</p></div></div>
+    </div>
+  </div>
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-btn lightbox-close" onclick="closeLightbox()" aria-label="Close">&#10005;</button>
+    <button class="lightbox-btn lightbox-prev" onclick="event.stopPropagation();prevImg()" aria-label="Previous">&#8249;</button>
+    <button class="lightbox-btn lightbox-next" onclick="event.stopPropagation();nextImg()" aria-label="Next">&#8250;</button>
+    <img id="lightboxImg" src="" alt="">
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team" class="section" style="overflow:hidden;position:relative">
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent,rgba(179,71,234,0.015),transparent)"></div>
+  <div class="section-inner" style="position:relative;z-index:1">
+    <div class="aos" style="text-align:center;margin-bottom:1.5rem">
+      <span class="section-tag">Autoridad Multidisciplinaria</span>
+      <h2 class="section-title">La Mente detrás de <span class="text-metallic-shine">INNOA</span></h2>
+    </div>
+    <div class="aos" style="text-align:center;color:var(--muted-fg);max-width:48rem;margin:0 auto 4rem;line-height:1.7">
+      No somos solo programadores; somos un HUB tecnológico integrado por profesores universitarios, magísters, técnicos especializados y diseñadores de élite con posgrados en Educación 4.0, Inteligencia Artificial y Tecnologías Inmersivas.
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem">
+      <div class="card aos scale" style="padding:1.5rem;transition-delay:0.1s"><div style="width:3.5rem;height:3.5rem;border-radius:0.75rem;background:linear-gradient(to bottom right,var(--metallic-dark),var(--metallic));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:1rem;margin-bottom:1rem">GZ</div><h3 style="font-size:1rem;font-weight:700;margin-bottom:0.25rem">Guillermo Zenón de la Cámara</h3><p style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--metallic-light);margin-bottom:0.75rem">CEO & Co-Fundador</p><p style="color:var(--muted-fg);font-size:0.875rem;line-height:1.6;margin-bottom:0.75rem">Lidera la visión estratégica y la integración de soluciones de IA de alto impacto empresarial.</p><a href="https://www.linkedin.com/in/guillermo-zenon-de-la-camara" target="_blank" rel="noopener noreferrer" style="font-size:0.75rem;color:var(--muted-fg)">Ver Perfil en LinkedIn &#8599;</a></div>
+      <div class="card aos scale" style="padding:1.5rem;transition-delay:0.15s"><div style="width:3.5rem;height:3.5rem;border-radius:0.75rem;background:linear-gradient(to bottom right,var(--metallic-dark),var(--metallic));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:1rem;margin-bottom:1rem">MN</div><h3 style="font-size:1rem;font-weight:700;margin-bottom:0.25rem">Ing. Mónica Núñez</h3><p style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--metallic-light);margin-bottom:0.75rem">Estrategia para Clientes</p><p style="color:var(--muted-fg);font-size:0.875rem;line-height:1.6">Sistemas y estrategia. Diseña las soluciones tecnológicas que potencian la operativa de cada cliente.</p></div>
+      <div class="card aos scale" style="padding:1.5rem;transition-delay:0.2s"><div style="width:3.5rem;height:3.5rem;border-radius:0.75rem;background:linear-gradient(to bottom right,var(--metallic-dark),var(--metallic));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:1rem;margin-bottom:1rem">NL</div><h3 style="font-size:1rem;font-weight:700;margin-bottom:0.25rem">Magíster Nilda Lozano</h3><p style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--metallic-light);margin-bottom:0.75rem">Directora Pedagógica</p><p style="color:var(--muted-fg);font-size:0.875rem;line-height:1.6">Magíster en Educación 4.0, Profesora Universitaria. Diseña el ADN pedagógico de nuestros agentes de IA.</p></div>
+      <div class="card aos scale" style="padding:1.5rem;transition-delay:0.25s"><div style="width:3.5rem;height:3.5rem;border-radius:0.75rem;background:linear-gradient(to bottom right,var(--metallic-dark),var(--metallic));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:1rem;margin-bottom:1rem">MC</div><h3 style="font-size:1rem;font-weight:700;margin-bottom:0.25rem">Martina Milagros de la Cámara</h3><p style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--metallic-light);margin-bottom:0.75rem">Lead Graphic & Interaction Design</p><p style="color:var(--muted-fg);font-size:0.875rem;line-height:1.6">Diseñadora Gráfica Senior. Traduce la complejidad técnica en identidades visuales potentes.</p></div>
+      <div class="card aos scale" style="padding:1.5rem;transition-delay:0.3s"><div style="width:3.5rem;height:3.5rem;border-radius:0.75rem;background:linear-gradient(to bottom right,var(--metallic-dark),var(--metallic));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:1rem;margin-bottom:1rem">MN</div><h3 style="font-size:1rem;font-weight:700;margin-bottom:0.25rem">Matías de la Cámara Núñez</h3><p style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--metallic-light);margin-bottom:0.75rem">Jefe del Área de Programación</p><p style="color:var(--muted-fg);font-size:0.875rem;line-height:1.6">Técnico Universitario en Sistemas. Orquesta el desarrollo de software de alta fidelidad.</p></div>
+      <div class="card aos scale" style="padding:1.5rem;transition-delay:0.35s"><div style="width:3.5rem;height:3.5rem;border-radius:0.75rem;background:linear-gradient(to bottom right,var(--metallic-dark),var(--metallic));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:1rem;margin-bottom:1rem">JC</div><h3 style="font-size:1rem;font-weight:700;margin-bottom:0.25rem">Joaquín de la Cámara</h3><p style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--metallic-light);margin-bottom:0.75rem">Especialista en RPA</p><p style="color:var(--muted-fg);font-size:0.875rem;line-height:1.6">El cerebro detrás de los Agentes de IA que gestionan tareas y optimizan flujos de trabajo 24/7.</p></div>
+      <div class="card aos scale" style="padding:1.5rem;transition-delay:0.4s"><div style="width:3.5rem;height:3.5rem;border-radius:0.75rem;background:linear-gradient(to bottom right,var(--metallic-dark),var(--metallic));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:1rem;margin-bottom:1rem">GC</div><h3 style="font-size:1rem;font-weight:700;margin-bottom:0.25rem">Gabriel Calisaya</h3><p style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--metallic-light);margin-bottom:0.75rem">Frontend & Realidad Aumentada</p><p style="color:var(--muted-fg);font-size:0.875rem;line-height:1.6">Encargado de hacer la tecnología inmersiva. Desarrolla interfaces visuales y capas de realidad aumentada.</p></div>
+    </div>
+  </div>
+  <div class="wave flip">
+    <svg viewBox="0 0 1440 200" preserveAspectRatio="none"><defs><linearGradient id="wv3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#b347ea" stop-opacity="0"/><stop offset="50%" stop-color="#7c3aed" stop-opacity="0.2"/><stop offset="100%" stop-color="#b347ea" stop-opacity="0"/></linearGradient></defs><path class="wave-path" fill="url(#wv3)" d="M0,100 C360,180 720,20 1080,100 C1260,140 1380,80 1440,100 L1440,200 L0,200 Z"/></svg>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education" class="section" style="overflow:hidden;position:relative">
+  <div class="section-inner" style="position:relative;z-index:1">
+    <div class="aos" style="text-align:center;margin-bottom:5rem">
+      <span class="section-tag">Educación 4.0</span>
+      <h2 class="section-title">Formación que <span class="text-metallic-shine">transforma</span></h2>
+      <p style="font-size:1.125rem;color:var(--muted-fg);max-width:48rem;margin:0 auto;line-height:1.7">Diplomaturas, posgrados y programas de capacitación que integran IA, Realidad Aumentada y pedagogía avanzada. Formamos a los líderes tecnológicos del futuro desde el aula.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;margin-bottom:3rem">
+      <div class="card aos scale" style="padding:1.5rem;text-align:center;transition-delay:0.1s"><div style="font-size:2rem;font-weight:900" class="text-metallic-shine">Jujuy</div><div style="font-size:0.6875rem;color:var(--muted-fg);margin-top:0.5rem;text-transform:uppercase;letter-spacing:0.15em">Sede Principal</div></div>
+      <div class="card aos scale" style="padding:1.5rem;text-align:center;transition-delay:0.15s"><div style="font-size:2rem;font-weight:900" class="text-metallic-shine">Salta</div><div style="font-size:0.6875rem;color:var(--muted-fg);margin-top:0.5rem;text-transform:uppercase;letter-spacing:0.15em">Extensión Regional</div></div>
+      <div class="card aos scale" style="padding:1.5rem;text-align:center;transition-delay:0.2s"><div style="font-size:2rem;font-weight:900" class="text-metallic-shine">Misiones</div><div style="font-size:0.6875rem;color:var(--muted-fg);margin-top:0.5rem;text-transform:uppercase;letter-spacing:0.15em">Expansión Federal</div></div>
+    </div>
+    <!-- Agente Pedagógico -->
+    <div class="aos" style="display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-bottom:3rem">
+      <a href="https://chat.whatsapp.com/FA9j9NdjXSdAbrzwbEsiia" target="_blank" rel="noopener noreferrer" class="btn-primary" style="text-decoration:none">Unirme a la comunidad &#8599;</a>
+      <a href="https://innoa-web.vercel.app" target="_blank" rel="noopener noreferrer" class="btn-outline" style="text-decoration:none">&#129302; Agente Arquitecto de Trayectoria</a>
+    </div>
+    <div class="aos" style="max-width:48rem;margin:0 auto">
+      <div class="card" style="padding:2rem 2.5rem;position:relative;overflow:hidden">
+        <div style="position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(to right,transparent,rgba(179,71,234,0.2),transparent)"></div>
+        <p style="font-size:3rem;opacity:0.1;margin-bottom:1rem">&ldquo;</p>
+        <p style="color:rgba(240,240,240,0.85);line-height:1.7;font-style:italic;font-size:0.9375rem;margin-bottom:1.5rem">El Agente Pedagógico de INNOA cambió mi forma de planificar clases. Lo que me llevaba horas, ahora lo resuelvo en minutos con resultados de calidad profesional. Es la herramienta que todo docente necesita.</p>
+        <div style="display:flex;align-items:center;gap:0.75rem">
+          <div style="width:2.5rem;height:2.5rem;border-radius:50%;background:linear-gradient(to bottom right,var(--metallic-dark),var(--metallic));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.875rem">D</div>
+          <div><div style="font-weight:600;font-size:0.875rem">Docente</div><div style="font-size:0.75rem;color:var(--muted-fg)">Comunidad Educativa INNOA</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" style="overflow:hidden;position:relative">
+  <div class="section-inner" style="position:relative;z-index:1">
+    <div class="aos" style="text-align:center;margin-bottom:4rem">
+      <span class="section-tag">Confianza Comprobada</span>
+      <h2 class="section-title">Resultados que <span class="text-metallic-shine">hablan</span></h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem">
+      <div class="card aos scale" style="padding:2rem;transition-delay:0.1s"><p style="font-size:3rem;opacity:0.1;margin-bottom:1.25rem">&ldquo;</p><p style="color:rgba(240,240,240,0.85);line-height:1.7;font-style:italic;font-size:0.9375rem;margin-bottom:1.5rem">INNOA revolucionó nuestra comunicación con contenido multimedia generado por inteligencia artificial. Las piezas audiovisuales que produjeron para Cine Alfa elevaron nuestra imagen a un nivel internacional.</p><div style="display:flex;align-items:center;gap:0.75rem"><div style="width:2.5rem;height:2.5rem;border-radius:50%;background:linear-gradient(to bottom right,var(--metallic-dark),var(--metallic));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.875rem">C</div><div><div style="font-weight:600;font-size:0.875rem">Cine Alfa</div><div style="font-size:0.75rem;color:var(--muted-fg)">Entretenimiento — Cliente de IA Multimedia</div></div></div></div>
+      <div class="card aos scale" style="padding:2rem;transition-delay:0.2s"><p style="font-size:3rem;opacity:0.1;margin-bottom:1.25rem">&ldquo;</p><p style="color:rgba(240,240,240,0.85);line-height:1.7;font-style:italic;font-size:0.9375rem;margin-bottom:1.5rem">La gamificación que implementaron para la educación vial logró lo que años de campañas tradicionales no pudieron: que la gente realmente aprenda y se divierta haciéndolo.</p><div style="display:flex;align-items:center;gap:0.75rem"><div style="width:2.5rem;height:2.5rem;border-radius:50%;background:linear-gradient(to bottom right,var(--metallic-dark),var(--metallic));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.875rem">G</div><div><div style="font-weight:600;font-size:0.875rem">Gobierno de Jujuy</div><div style="font-size:0.75rem;color:var(--muted-fg)">Sector Público — Seguridad Vial</div></div></div></div>
+      <div class="card aos scale" style="padding:2rem;transition-delay:0.3s"><p style="font-size:3rem;opacity:0.1;margin-bottom:1.25rem">&ldquo;</p><p style="color:rgba(240,240,240,0.85);line-height:1.7;font-style:italic;font-size:0.9375rem;margin-bottom:1.5rem">Más de 1.000 socios gestionados digitalmente gracias a INNOA. No solo nos dieron software, nos entregaron una solución integral que transformó completamente la operación de nuestra Asociación.</p><div style="display:flex;align-items:center;gap:0.75rem"><div style="width:2.5rem;height:2.5rem;border-radius:50%;background:linear-gradient(to bottom right,var(--metallic-dark),var(--metallic));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.875rem">A</div><div><div style="font-weight:600;font-size:0.875rem">Comisión Directiva</div><div style="font-size:0.75rem;color:var(--muted-fg)">Asociación de Jubilados — Gestión Comunitaria</div></div></div></div>
+      <div class="card aos scale" style="padding:2rem;transition-delay:0.4s"><p style="font-size:3rem;opacity:0.1;margin-bottom:1.25rem">&ldquo;</p><p style="color:rgba(240,240,240,0.85);line-height:1.7;font-style:italic;font-size:0.9375rem;margin-bottom:1.5rem">La Realidad Aumentada que desarrolló INNOA para nuestras exposiciones mineras permitió a la comunidad jujeña entender procesos que antes eran invisibles. Un impacto real.</p><div style="display:flex;align-items:center;gap:0.75rem"><div style="width:2.5rem;height:2.5rem;border-radius:50%;background:linear-gradient(to bottom right,var(--metallic-dark),var(--metallic));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.875rem">M</div><div><div style="font-weight:600;font-size:0.875rem">Minera Exar</div><div style="font-size:0.75rem;color:var(--muted-fg)">Sector Minería — Comunicación Institucional</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section" style="overflow:hidden;position:relative">
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent,rgba(179,71,234,0.02),transparent)"></div>
+  <div class="glow" style="top:50%;left:25%;width:400px;height:400px;background:rgba(179,71,234,0.05);filter:blur(120px);transform:translateY(-50%)"></div>
+  <div class="glow" style="top:50%;right:25%;width:300px;height:300px;background:rgba(179,71,234,0.04);filter:blur(100px);transform:translateY(-50%)"></div>
+  <div style="max-width:56rem;margin:0 auto;padding:0 1.5rem;position:relative;z-index:1;text-align:center">
+    <div class="aos" style="margin-bottom:2rem">
+      <h2 style="font-size:clamp(2.25rem,6vw,4.5rem);font-weight:900;line-height:1.2;margin-bottom:1.5rem"><span class="title-shimmer">¿Listo para la</span><br><span class="gradient-text-neon">Transformación Digital</span>?</h2>
+      <p style="font-size:1.125rem;color:var(--muted-fg);max-width:42rem;margin:0 auto;line-height:1.7">Déjenos demostrarle lo que la tecnología de frontera puede hacer por su empresa.</p>
+    </div>
+    <div class="aos" style="display:flex;flex-wrap:wrap;justify-content:center;gap:1.25rem">
+      <div class="btn-badge">&#129302; Buscá el globo de Zen en la esquina inferior derecha</div>
+      <a href="#contact" class="btn-outline" style="text-decoration:none">Solicitar una Auditoría de Innovación Gratis</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section grid-pattern">
+  <div class="section-inner">
+    <div class="aos" style="text-align:center;margin-bottom:5rem">
+      <span class="section-tag">Contacto Comercial</span>
+      <h2 class="section-title">Impulse su <span class="text-metallic-shine">Transformación</span> Digital</h2>
+      <p style="font-size:1.125rem;color:var(--muted-fg);max-width:42rem;margin:0 auto">Conectá con nosotros por cualquier canal. Nuestro agente Zen puede resolver tus consultas al instante.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;max-width:60rem;margin:0 auto">
+      <!-- Platforms -->
+      <div class="card aos" style="padding:1.75rem;transition-delay:0.1s">
+        <h3 style="font-size:1.125rem;font-weight:700;margin-bottom:1.25rem">Plataformas & Canales</h3>
+        <div style="display:flex;flex-direction:column;gap:1rem">
+          <a href="https://www.innoajujuy.com" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:0.75rem;color:var(--muted-fg);transition:color 0.3s"><span style="font-size:1.25rem">&#127760;</span><div><div style="font-weight:500;font-size:0.875rem;color:var(--fg)">Plataforma Educativa</div><div style="font-size:0.75rem">www.innoajujuy.com</div></div></a>
+          <a href="https://www.facebook.com/san.tikitaka.3" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:0.75rem;color:var(--muted-fg);transition:color 0.3s"><span style="font-size:1.25rem">&#128266;</span><div><div style="font-weight:500;font-size:0.875rem;color:var(--fg)">Facebook</div><div style="font-size:0.75rem">INNOA Jujuy</div></div></a>
+          <a href="https://www.instagram.com/p/DXZJ3sgkiY6/" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:0.75rem;color:var(--muted-fg);transition:color 0.3s"><span style="font-size:1.25rem">&#128247;</span><div><div style="font-weight:500;font-size:0.875rem;color:var(--fg)">Instagram</div><div style="font-size:0.75rem">INNOA Jujuy</div></div></a>
+          <a href="https://wa.me/5493886865482" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:0.75rem;color:var(--muted-fg);transition:color 0.3s"><span style="font-size:1.25rem">&#128222;</span><div><div style="font-weight:500;font-size:0.875rem;color:var(--fg)">WhatsApp</div><div style="font-size:0.75rem">+54 9 388 686-5482</div></div></a>
+        </div>
+      </div>
+      <!-- Zen -->
+      <div class="card aos" style="padding:1.75rem;text-align:center;transition-delay:0.2s;position:relative;overflow:hidden">
+        <div style="position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(to right,transparent,rgba(179,71,234,0.3),transparent)"></div>
+        <div style="width:4rem;height:4rem;border-radius:1rem;background:linear-gradient(to bottom right,#b347ea,#7c3aed);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:2rem;color:#fff">&#129302;</div>
+        <h3 style="font-size:1.25rem;font-weight:900;margin-bottom:0.5rem">Zen</h3>
+        <p style="font-size:0.875rem;color:var(--muted-fg);margin-bottom:1.5rem;line-height:1.7">Nuestro agente de IA está disponible 24/7 para resolver consultas, derivar al área correcta y agendar reuniones con el equipo de INNOA.</p>
+        <div style="width:100%;padding:0.875rem 1.5rem;border-radius:9999px;background:linear-gradient(to right,#b347ea,#7c3aed);color:#fff;font-weight:700;text-align:center;letter-spacing:0.05em">Buscá el globo de Zen en la esquina inferior derecha</div>
+        <p style="font-size:0.625rem;color:rgba(136,136,136,0.5);margin-top:1rem">Respuesta inmediata — Disponible 24/7</p>
+      </div>
+      <!-- Location -->
+      <div class="card aos" style="padding:1.75rem;transition-delay:0.3s">
+        <h3 style="font-size:1.125rem;font-weight:700;margin-bottom:1.25rem">Ubicación & Propuesta</h3>
+        <div style="display:flex;flex-direction:column;gap:1rem">
+          <div style="display:flex;align-items:start;gap:0.75rem"><span style="font-size:1.25rem;margin-top:0.125rem">&#128205;</span><div><div style="font-weight:500;font-size:0.875rem;color:var(--fg)">San Salvador de Jujuy</div><div style="font-size:0.75rem;color:var(--muted-fg)">Jujuy, Argentina — Alcance Nacional</div></div></div>
+          <div style="display:flex;align-items:start;gap:0.75rem"><span style="font-size:1.25rem;margin-top:0.125rem">&#128231;</span><div><div style="font-weight:500;font-size:0.875rem;color:var(--fg)">info@innoa.com</div><div style="font-size:0.75rem;color:var(--muted-fg)">Respuesta en menos de 24hs</div></div></div>
+        </div>
+        <div style="margin-top:1.5rem;padding:1rem;border-radius:0.75rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05)">
+          <p style="font-size:0.8125rem;color:var(--muted-fg);line-height:1.7"><strong style="color:var(--fg)">Diagnóstico Tecnológico Gratuito:</strong> Analizamos tu empresa sin costo y te entregamos un plan de transformación digital personalizado con ROI proyectado.</p>
+        </div>
+        <ul style="margin-top:1rem;list-style:none;padding:0">
+          <li style="display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;color:var(--muted-fg);margin-bottom:0.5rem">&#10024; Diagnóstico tecnológico gratuito</li>
+          <li style="display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;color:var(--muted-fg);margin-bottom:0.5rem">&#10024; Plan personalizado con KPIs</li>
+          <li style="display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;color:var(--muted-fg);margin-bottom:0.5rem">&#10024; Demostración en vivo de soluciones</li>
+          <li style="display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;color:var(--muted-fg)">&#10024; Sin compromiso de contratación</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="border-top:1px solid var(--border);padding:3rem 1.5rem">
+  <div style="max-width:80rem;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1.5rem">
+    <div>
+      <div style="font-size:1.25rem;font-weight:700;letter-spacing:0.15em;margin-bottom:0.5rem">INNOA</div>
+      <p style="font-size:0.8125rem;color:var(--muted-fg)">Mentes Inquietas, Clientes Audaces. Jujuy, Argentina.</p>
+    </div>
+    <div style="display:flex;gap:1rem">
+      <a href="https://www.facebook.com/san.tikitaka.3" target="_blank" rel="noopener noreferrer" style="width:2.5rem;height:2.5rem;border-radius:50%;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;color:var(--muted-fg);transition:all 0.3s;font-size:1.125rem" title="Facebook">f</a>
+      <a href="https://www.instagram.com/p/DXZJ3sgkiY6/" target="_blank" rel="noopener noreferrer" style="width:2.5rem;height:2.5rem;border-radius:50%;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;color:var(--muted-fg);transition:all 0.3s;font-size:1.125rem" title="Instagram">&#9638;</a>
+    </div>
+    <p style="font-size:0.75rem;color:rgba(136,136,136,0.5)">&copy; 2026 INNOA. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/5493886865482" target="_blank" rel="noopener noreferrer" class="wa-float" aria-label="Contactar por WhatsApp">&#128172;</a>
+
+<!-- BOTPRESS WEBCHAT -->
+<div id="bp-web-chat-container"></div>
+<script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+<script src="https://files.bpcontent.cloud/2026/05/02/18/20260502180714-L9OHC9TU.js" defer></script>
+
+<!-- JAVASCRIPT -->
+<script>
+// Navbar scroll
+const nav=document.getElementById('navbar');
+window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>40)});
+
+// Mobile menu
+const menuBtn=document.getElementById('menuBtn');
+const mobileMenu=document.getElementById('mobileMenu');
+menuBtn.addEventListener('click',()=>{const open=mobileMenu.classList.toggle('open');menuBtn.innerHTML=open?'&#10005;':'&#9776;'});
+mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mobileMenu.classList.remove('open');menuBtn.innerHTML='&#9776;'}));
+
+// Animate on scroll
+const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}})},{threshold:0.1});
+document.querySelectorAll('.aos').forEach(el=>observer.observe(el));
+
+// Card hover lines
+document.querySelectorAll('.card').forEach(c=>{c.addEventListener('mouseenter',()=>{const l=c.querySelector('.card-line');if(l)l.style.opacity=1});c.addEventListener('mouseleave',()=>{const l=c.querySelector('.card-line');if(l)l.style.opacity=0})});
+
+// Gallery Lightbox
+const galleryImages=["/images/WhatsApp Image 2026-04-30 at 16.26.31.jpeg","/images/WhatsApp Image 2026-04-30 at 16.26.32.jpeg","/images/WhatsApp Image 2026-04-30 at 16.26.33.jpeg","/images/WhatsApp Image 2026-04-30 at 16.26.33 (1).jpeg","/images/project-mining.png","/images/project-education.png","/images/project-webdev.png","/images/tech-bg.png"];
+let currentImg=0;
+const lightbox=document.getElementById('lightbox');
+const lightboxImg=document.getElementById('lightboxImg');
+function openLightbox(i){currentImg=i;lightboxImg.src=galleryImages[i];lightbox.classList.add('open');document.body.style.overflow='hidden'}
+function closeLightbox(){lightbox.classList.remove('open');document.body.style.overflow=''}
+function nextImg(){currentImg=(currentImg+1)%galleryImages.length;lightboxImg.src=galleryImages[currentImg]}
+function prevImg(){currentImg=(currentImg-1+galleryImages.length)%galleryImages.length;lightboxImg.src=galleryImages[currentImg]}
+document.addEventListener('keydown',e=>{if(!lightbox.classList.contains('open'))return;if(e.key==='Escape')closeLightbox();if(e.key==='ArrowRight')nextImg();if(e.key==='ArrowLeft')prevImg()});
+
+// Star field canvas
+(function(){const canvas=document.getElementById('starfield');if(!canvas)return;const ctx=canvas.getContext('2d');if(!ctx)return;const NUM=400,FL=300,MD=1500,SP=2.5;let stars=[],cx=0,cy=0;
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;cx=canvas.width/2;cy=canvas.height/2}
+resize();window.addEventListener('resize',resize);
+for(let i=0;i<NUM;i++){const r=Math.random();let c;if(r<0.7)c='#d0d0e0';else if(r<0.85)c='#c8a0e8';else if(r<0.95)c='#a0d8b0';else c='#e0d8c0';stars.push({x:(Math.random()-0.5)*canvas.width*2,y:(Math.random()-0.5)*canvas.height*2,z:Math.random()*MD,pz:0,color:c});stars[i].pz=stars[i].z}
+function draw(){ctx.fillStyle='rgba(5,5,5,0.2)';ctx.fillRect(0,0,canvas.width,canvas.height);for(let i=0;i<stars.length;i++){const s=stars[i];s.pz=s.z;s.z-=SP;if(s.z<=1){s.x=(Math.random()-0.5)*canvas.width*2;s.y=(Math.random()-0.5)*canvas.height*2;s.z=MD;s.pz=MD;continue}const sx=(s.x/s.z)*FL+cx,sy=(s.y/s.z)*FL+cy,px=(s.x/s.pz)*FL+cx,py=(s.y/s.pz)*FL+cy;const df=1-s.z/MD,sz=Math.max(0.1,df*2.5),a=Math.min(1,df*1.2);ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(sx,sy);ctx.strokeStyle=s.color;ctx.globalAlpha=a*0.6;ctx.lineWidth=sz*0.5;ctx.stroke();ctx.beginPath();ctx.arc(sx,sy,sz,0,Math.PI*2);ctx.fillStyle=s.color;ctx.globalAlpha=a;ctx.fill();if(df>0.7){ctx.beginPath();ctx.arc(sx,sy,sz*3,0,Math.PI*2);ctx.fillStyle=s.color;ctx.globalAlpha=a*0.08;ctx.fill()}}ctx.globalAlpha=1;requestAnimationFrame(draw)}
+draw()})();
+</script>
+</body>
+</html>
